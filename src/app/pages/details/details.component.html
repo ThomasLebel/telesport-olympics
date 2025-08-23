@@ -1,0 +1,48 @@
+@if (isLoading){
+<app-loader></app-loader>
+} @if(currentCountry){
+<div class="main-container">
+  <div class="header">
+    <mat-icon
+      (click)="onArrowBackClick()"
+      class="back-icon"
+      aria-hidden="false"
+      aria-label="arrow back icon"
+      fontIcon="arrow_circle_left"
+    ></mat-icon>
+    <h1 class="title">{{ currentCountry.country }}</h1>
+  </div>
+
+  <div class="counters-section">
+    <div class="counter-container">
+      <h2>Number of entries</h2>
+      <span class="counter">{{ currentCountry.participations.length }}</span>
+    </div>
+    <div class="counter-container">
+      <h2>Total number medals</h2>
+      <span class="counter">{{ nbMedals }}</span>
+    </div>
+    <div class="counter-container">
+      <h2>Total number of athletes</h2>
+      <span class="counter">{{ nbAthletes }}</span>
+    </div>
+  </div>
+
+  <div #containerRef class="diagramContainer">
+    <ngx-charts-line-chart
+      [view]="[containerRef.offsetWidth, containerRef.offsetHeight]"
+      scheme="cool"
+      [showXAxisLabel]="true"
+      [showYAxisLabel]="true"
+      [xAxis]="true"
+      [yAxis]="true"
+      xAxisLabel="Year"
+      yAxisLabel="Nb medals"
+      [timeline]="true"
+      [results]="[lineChartData]"
+      [yScaleMin]="minYAxis"
+    >
+    </ngx-charts-line-chart>
+  </div>
+</div>
+}

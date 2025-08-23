@@ -1,4 +1,8 @@
 <div class="main-container">
+  @if (isLoading){
+  <app-loader></app-loader>
+  }
+
   <h1 class="title">Medals per Country</h1>
 
   <div class="counters-section">
@@ -11,14 +15,33 @@
       <span class="counter">{{ nbCountries }}</span>
     </div>
   </div>
-  <div class="diagramContainer">
-    <!-- <ngx-charts-pie-chart
-      [view]="[700, 400]"
-      scheme="vivid"
+
+  @if (diagramData){
+  <div #containerRef class="diagramContainer">
+    <ngx-charts-pie-chart
+      [view]="[containerRef.offsetWidth, containerRef.offsetHeight]"
+      scheme="cool"
       [results]="diagramData"
-      [legend]="true"
+      [legend]="false"
       [labels]="true"
+      [tooltipDisabled]="false"
+      (select)="onCountryClick($event)"
     >
-    </ngx-charts-pie-chart> -->
+      <ng-template #tooltipTemplate let-model="model">
+        <div class="tooltip">
+          <span class="tooltip-country">{{ model.name }}</span>
+          <div class="value-container">
+            <mat-icon
+              class="medal-icon"
+              aria-hidden="false"
+              aria-label="Medal icon"
+              fontIcon="workspace_premium"
+            ></mat-icon>
+            <span class="value">{{ model.value }}</span>
+          </div>
+        </div>
+      </ng-template>
+    </ngx-charts-pie-chart>
   </div>
+  }
 </div>

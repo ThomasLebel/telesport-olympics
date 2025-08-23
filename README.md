@@ -1,29 +1,75 @@
-# OlympicGamesStarter
+# 🥇 TeleSport Olympics
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.3.
+Cette application Angular permet de visualiser les performances des pays aux Jeux Olympiques.
+Elle affiche les participations, le nombre d’athlètes et de médailles, ainsi que des graphiques interactifs (via ngx-charts).
 
-Don't forget to install your node_modules before starting (`npm install`).
+## 🚀 Installation & lancement
 
-## Development server
+### 1. Cloner le projet
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+`bash
+    git clone [<url-du-repo>](https://github.com/ThomasLebel/telesport-olympics.git)
+    cd telesport-olympics
+`
 
-## Build
+### 2. Installer les dépendances
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+`bash
+    npm install
+`
 
-## Where to start
+### 3. Lancer l’application en mode développement
 
-As you can see, an architecture has already been defined for the project. It is just a suggestion, you can choose to use your own. The predefined architecture includes (in addition to the default angular architecture) the following:
+`bash
+ng serve
 
-- `components` folder: contains every reusable components
-- `pages` folder: contains components used for routing
-- `core` folder: contains the business logic (`services` and `models` folders)
+`
+Puis ouvrir http://localhost:4200 dans le navigateur.
 
-I suggest you to start by understanding this starter code. Pay an extra attention to the `app-routing.module.ts` and the `olympic.service.ts`.
+### 4. Build pour la production
 
-Once mastered, you should continue by creating the typescript interfaces inside the `models` folder. As you can see I already created two files corresponding to the data included inside the `olympic.json`. With your interfaces, improve the code by replacing every `any` by the corresponding interface.
+`bash
+ng build
 
-You're now ready to implement the requested features.
+`
 
-Good luck!
+## 🛠️ Fonctionnement du code
+
+- **Gestion des données**
+
+  - Les données olympiques sont fournies via un Observable (olympics$).
+  - Sur la page d'accueil, l'app calcule :
+
+    - Le nombre total de JOs
+    - Le nombre de pays
+    - Les données du graphique circulaire avec le nombre de médailles reçues par pays
+
+  - Lorsqu’un pays est sélectionné, l’app calcule :
+    - Le nombre total de médailles,
+    - Le nombre total d’athlètes,
+    - Les données du graphique en ligne avec le nombre de médailles reçues par année du pays sélectionné
+
+- **Gestion des erreurs**
+  Si l'utilisateur essaie d'accéder à une route inexistante ou à un pays qui n'est pas présent dans les données, il est redirigé vers une page d'erreur.
+
+- **Composants réutilisables**
+
+  - Un composant Loader est utilisé pour l’affichage lors du chargement des données.
+  - Les graphiques sont générés avec ngx-charts.
+
+## 📂 Structure principale
+
+`bash
+src/app/
+├─ pages/               # Pages principales (Details, NotFound…)
+├─ shared/components/   # Composants réutilisables (Loader…)
+├─ app-routing.module.ts # Configuration des routes
+└─ app.component.ts      # Composant racine
+`
+
+## ✅ Technologies utilisées
+
+    * Angular 18
+    * RxJS
+    * ngx-charts
+    * TypeScript

@@ -7,31 +7,29 @@ Elle affiche les participations, le nombre d’athlètes et de médailles, ainsi
 
 ### 1. Cloner le projet
 
-`bash
-    git clone [<url-du-repo>](https://github.com/ThomasLebel/telesport-olympics.git)
+```bash
+    git clone https://github.com/ThomasLebel/telesport-olympics.git
     cd telesport-olympics
-`
+```
 
 ### 2. Installer les dépendances
 
-`bash
-    npm install
-`
+```bash
+  npm install
+```
 
 ### 3. Lancer l’application en mode développement
 
-`bash
-ng serve
-
-`
+```bash
+  ng serve
+```
 Puis ouvrir http://localhost:4200 dans le navigateur.
 
 ### 4. Build pour la production
 
-`bash
-ng build
-
-`
+```bash
+  ng build
+```
 
 ## 🛠️ Fonctionnement du code
 
@@ -50,6 +48,7 @@ ng build
     - Les données du graphique en ligne avec le nombre de médailles reçues par année du pays sélectionné
 
 - **Gestion des erreurs**
+  
   Si l'utilisateur essaie d'accéder à une route inexistante ou à un pays qui n'est pas présent dans les données, il est redirigé vers une page d'erreur.
 
 - **Composants réutilisables**
@@ -59,17 +58,17 @@ ng build
 
 ## 📂 Structure principale
 
-`bash
+```bash
 src/app/
 ├─ pages/               # Pages principales (Details, NotFound…)
 ├─ shared/components/   # Composants réutilisables (Loader…)
 ├─ app-routing.module.ts # Configuration des routes
 └─ app.component.ts      # Composant racine
-`
+```
 
 ## ✅ Technologies utilisées
-
-    * Angular 18
-    * RxJS
-    * ngx-charts
-    * TypeScript
+  
+  * Angular 18
+  * RxJS
+  * ngx-charts
+  * TypeScript

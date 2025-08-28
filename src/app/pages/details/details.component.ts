@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
 import {
   LineChartData,
   SerieChartData,
@@ -13,29 +14,44 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
   templateUrl: './details.component.html',
   styleUrl: './details.component.scss',
 })
-export class DetailsComponent implements OnInit {
-  public olympics$: Observable<Olympic[] | null> = of(null);
+export class DetailsComponent implements OnInit, OnDestroy {
+  public olympics$: Observable<Olympic[] | null | undefined> = of(undefined);
   public currentCountry!: Olympic | undefined;
   public nbMedals!: number;
   public nbAthletes!: number;
   public lineChartData!: LineChartData;
   public minYAxis: number = Infinity;
   public isLoading: boolean = false;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private olympicService: OlympicService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private _snackBar: MatSnackBar
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.initProperties();
     this.olympics$ = this.olympicService.getOlympics();
-    this.olympics$.subscribe((data) => {
-      if (data) {
-        this.initCountryData(data);
-      }
-    });
+    this.olympics$
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((data) => data !== undefined)
+      )
+      .subscribe((data) => {
+        if (data) {
+          this.initCountryData(data);
+        } else {
+          this.openErrorSnackBar();
+          this.isLoading = false;
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   /**
@@ -59,7 +75,7 @@ export class DetailsComponent implements OnInit {
     if (this.currentCountry) {
       this.setStatsAndSeriesData(this.currentCountry);
     } else {
-      this.router.navigateByUrl('**');
+      this.router.navigateByUrl('/not-found');
     }
   }
 
@@ -67,7 +83,9 @@ export class DetailsComponent implements OnInit {
    * Permet de set les données des compteurs et du graphique en ligne
    * @param country
    */
-  setStatsAndSeriesData(country: Olympic) {
+  setStatsAndSeriesData(country: Olympic): void {
+    this.nbMedals = 0;
+    this.nbAthletes = 0;
     let series: SerieChartData[] = [];
     for (let participation of country.participations) {
       this.nbMedals += participation.medalsCount;
@@ -89,5 +107,17 @@ export class DetailsComponent implements OnInit {
    */
   onArrowBackClick(): void {
     this.router.navigateByUrl('');
+  }
+
+  openErrorSnackBar(): void {
+    this._snackBar.open(
+      'Une erreur réseau est surveune, réessayez plus tard',
+      'Fermer',
+      {
+        duration: 5000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+      }
+    );
   }
 }

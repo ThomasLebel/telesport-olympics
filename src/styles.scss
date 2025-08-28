@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+:root {
+  --primary-color: #04838f;
+  --secondary-color: #18747c;
+}
+
 html,
 body {
   height: 100%;
@@ -19,13 +24,15 @@ body {
   font-size: 20px !important;
 }
 
+@media (max-width: 768px) {
+  .pie-label {
+    font-size: 15px !important;
+  }
+}
+
 html,
 body {
   height: 100%;
-}
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .ngx-charts-tooltip-content {

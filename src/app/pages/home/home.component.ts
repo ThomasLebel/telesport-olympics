@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
 import { Olympic } from 'src/app/core/models/Olympic';
 import { PieChartData } from 'src/app/core/models/PieChartData';
 import { PieChartEvent } from 'src/app/core/models/PieChartEvent';
@@ -11,23 +12,41 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
-  public olympics$: Observable<Olympic[] | null> = of(null);
+export class HomeComponent implements OnInit, OnDestroy {
+  public olympics$: Observable<Olympic[] | null | undefined> = of(undefined);
   public nbJOs: number = 0;
   public nbCountries: number = 0;
-  public diagramData: PieChartData[] = [];
+  public diagramData: PieChartData[] | undefined = undefined;
   public isLoading: boolean = false;
+  private destroy$ = new Subject<void>();
 
-  constructor(private olympicService: OlympicService, private router: Router) {}
+  constructor(
+    private olympicService: OlympicService,
+    private router: Router,
+    private _snackBar: MatSnackBar
+  ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.isLoading = true;
     this.olympics$ = this.olympicService.getOlympics();
-    this.olympics$.subscribe((data) => {
-      if (data) {
-        this.setProperties(data);
-      }
-    });
+    this.olympics$
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((data) => data !== undefined)
+      )
+      .subscribe((data) => {
+        if (data && data.length) {
+          this.setProperties(data);
+        } else {
+          this.openErrorSnackBar();
+          this.isLoading = false;
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   /**
@@ -66,5 +85,20 @@ export class HomeComponent implements OnInit {
    */
   onCountryClick(event: PieChartEvent): void {
     this.router.navigateByUrl(`/details/${event.name}`);
+  }
+
+  /**
+   *Permet d'afficher une snackbar avec un message d'erreur
+   */
+  openErrorSnackBar() {
+    this._snackBar.open(
+      'Une erreur réseau est surveune, réessayez plus tard',
+      'Fermer',
+      {
+        duration: 5000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+      }
+    );
   }
 }

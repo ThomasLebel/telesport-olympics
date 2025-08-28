@@ -13,10 +13,13 @@ const routes: Routes = [
     path: 'details/:country',
     component: DetailsComponent,
   },
-
+  {
+    path: 'not-found',
+    component: NotFoundComponent,
+  },
   {
     path: '**', // wildcard
-    component: NotFoundComponent,
+    redirectTo: 'not-found',
   },
 ];
 

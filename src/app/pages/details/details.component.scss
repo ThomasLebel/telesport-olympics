@@ -19,18 +19,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #04838f;
+  color: var(--primary-color);
   cursor: pointer;
 }
 
 .back-icon:hover {
-  color: #18747c;
+  color: var(--secondary-color);
 }
 
 h1 {
-  font-weight: 300;
+  font-weight: 400;
   color: white;
-  background-color: #04838f;
+  background-color: var(--primary-color);
   padding-left: 15px;
   padding-right: 15px;
   padding-top: 5px;
@@ -39,7 +39,7 @@ h1 {
 }
 
 h2 {
-  font-weight: 300;
+  font-weight: 400;
   font-size: 20px;
 }
 
@@ -59,7 +59,7 @@ h2 {
   margin-left: 15px;
   margin-right: 15px;
   margin-top: 20px;
-  border: 3px solid #04838f;
+  border: 3px solid var(--secondary-color);
   border-radius: 15px;
 }
 
@@ -77,5 +77,14 @@ h2 {
 @media (max-width: 768px) {
   .diagramContainer {
     width: 80vw;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  h2 {
+    font-size: 15px;
+  }
+  .counter {
+    font-size: 15px;
   }
 }

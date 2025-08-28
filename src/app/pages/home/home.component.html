@@ -1,8 +1,7 @@
 <div class="main-container">
   @if (isLoading){
   <app-loader></app-loader>
-  }
-
+  } @if (diagramData){
   <h1 class="title">Medals per Country</h1>
 
   <div class="counters-section">
@@ -16,7 +15,6 @@
     </div>
   </div>
 
-  @if (diagramData){
   <div #containerRef class="diagramContainer">
     <ngx-charts-pie-chart
       [view]="[containerRef.offsetWidth, containerRef.offsetHeight]"

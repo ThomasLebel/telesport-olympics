@@ -55,7 +55,15 @@ export class HomeComponent implements OnInit, OnDestroy {
    */
   setProperties(olympics: Olympic[]) {
     this.nbCountries = olympics.length;
-    this.nbJOs = olympics[0].participations.length;
+    let josDates: Number[] = [];
+    olympics.forEach((olympic) => {
+      olympic.participations.forEach((participation) => {
+        if (!josDates.includes(participation.year)) {
+          josDates.push(participation.year);
+        }
+      });
+    });
+    this.nbJOs = josDates.length;
     this.diagramData = this.initDiagramData(olympics);
     this.isLoading = false;
   }
